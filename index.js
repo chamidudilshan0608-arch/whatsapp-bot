@@ -4,6 +4,7 @@ const qrcode = require('qrcode-terminal');
 const client = new Client({
     authStrategy: new LocalAuth(),
     puppeteer: {
+        executablePath: '/usr/bin/google-chrome-stable',
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
@@ -31,13 +32,11 @@ client.on('message', async (msg) => {
     const text = msg.body ? msg.body.trim() : '';
     const lowerText = text.toLowerCase();
 
-    // 1. Photo ආ විට පිළිතුරු යැවීම
     if (msg.hasMedia && msg.type === 'image') {
         await msg.reply(' ඔබ එවූ පින්තූරය සාර්ථකව ලැබුණි!');
         return;
     }
 
-    // 2. Command: "Hi [Name]" (උදා: Hi Dilshan)
     if (lowerText.startsWith('hi ')) {
         const nameInput = text.substring(3).trim();
         if (nameInput.length > 0) {
@@ -46,8 +45,6 @@ client.on('message', async (msg) => {
             await msg.reply(replyMessage);
         }
     }
-    
-    // 3. Commands: "Hi", "Hello", "Hey"
     else if (lowerText === 'hi' || lowerText === 'hello' || lowerText === 'hey') {
         const defaultReply = `ආයුබෝවන්! 🌟
 මා හා සම්බන්ධ වූවාට ස්තූතියි. ඔබට මාගෙන් සිදුවිය යුත්තේ කුමක්දැයි සටහන් තබන්න. මම හැකි ඉක්මනින් ඔබට පිළිතුරු ලබා දෙන්නෙමි. සුබ දවසක්!
@@ -63,7 +60,6 @@ My telegram link : https://t.me/dilshan7878`;
     }
 });
 
-// Auto Status Viewing Feature
 client.on('message', async (msg) => {
     if (msg.from === 'status@broadcast') {
         try {
@@ -76,3 +72,4 @@ client.on('message', async (msg) => {
 });
 
 client.initialize();
+
